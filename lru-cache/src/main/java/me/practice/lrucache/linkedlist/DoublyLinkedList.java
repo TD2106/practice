@@ -1,36 +1,52 @@
 package me.practice.lrucache.linkedlist;
 
 public class DoublyLinkedList<T> {
-    private DoublyNode<T> head;
-    private DoublyNode<T> tail;
+    private final DoublyNode<T> fakeHead;
+    private final DoublyNode<T> fakeTail;
+    private int length;
 
     public DoublyLinkedList() {
-        head = new DoublyNode<>(null);
-        tail = new DoublyNode<>(null);
-        linkTwoNodes(head, tail);
+        fakeHead = new DoublyNode<>(null);
+        fakeTail = new DoublyNode<>(null);
+        linkTwoNodes(fakeHead, fakeTail);
+        length = 0;
     }
 
     public void pushExistingNode(DoublyNode<T> node) {
         unlinkNode(node);
-        linkAsLastNode((DoublyNode<T>) node);
+        linkAsLastNode(node);
     }
 
     public DoublyNode<T> push(T value) {
-        DoublyNode<T> newNode = new DoublyNode<>(value);
+        final DoublyNode<T> newNode = new DoublyNode<>(value);
         linkAsLastNode(newNode);
+        length++;
         return newNode;
     }
 
+    public void removeNode(DoublyNode<T> node) {
+        unlinkNode(node);
+        length--;
+    }
+
     private void linkAsLastNode(DoublyNode<T> node) {
-        linkTwoNodes(tail.getPrevious(), node);
-        linkTwoNodes(node, tail);
+        linkTwoNodes(fakeTail.getPrevious(), node);
+        linkTwoNodes(node, fakeTail);
     }
 
-    public DoublyNode<T> getFirstNode() {
-        return head.getNext();
+    public DoublyNode<T> getHead() {
+        return fakeHead.getNext();
     }
 
-    public void unlinkNode(DoublyNode<T> node) {
+    public DoublyNode<T> getTail() {
+        return fakeTail.getPrevious();
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    private void unlinkNode(DoublyNode<T> node) {
         linkTwoNodes(node.getPrevious(), node.getNext());
         node.setPrevious(null);
         node.setNext(null);

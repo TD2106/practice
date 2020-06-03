@@ -50,15 +50,15 @@ public class LruCache<K, V> implements Cache<K, V> {
     }
 
     private void removeLruCache() {
-        final DoublyNode<K> lruNode = lruKeys.getFirstNode();
+        final DoublyNode<K> lruNode = lruKeys.getHead();
         remove(lruNode.getValue());
     }
 
     @Override
     public void remove(K key) {
         if(keyToValMapping.containsKey(key)){
+            lruKeys.removeNode(keyToNodeMapping.get(key));
             keyToValMapping.remove(key);
-            lruKeys.unlinkNode(keyToNodeMapping.get(key));
             keyToNodeMapping.remove(key);
         }
     }
