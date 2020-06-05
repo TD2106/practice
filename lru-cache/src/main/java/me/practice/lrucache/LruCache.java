@@ -63,6 +63,11 @@ public class LruCache<K, V> implements Cache<K, V> {
         }
     }
 
+    @Override
+    public int getSize() {
+        return keyToValMapping.size();
+    }
+
     private void updateKeyAsLastUsed(K key) {
         final DoublyNode<K> currentKeyNode = getKeyNode(key);
         lruKeys.pushExistingNode(currentKeyNode);
